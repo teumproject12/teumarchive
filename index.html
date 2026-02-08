@@ -6,9 +6,8 @@
     <title>틈(TEUM) 아카이브</title>
     <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
     <style>
-        /* 1. 기본 설정 */
         body {
-            background-color: #050505; /* 더 깊은 검정 */
+            background-color: #050505;
             color: #e0e0e0;
             font-family: 'Pretendard', sans-serif;
             display: flex;
@@ -16,222 +15,89 @@
             align-items: center;
             min-height: 100vh;
             margin: 0;
-            overflow-x: hidden;
+            overflow: hidden;
         }
 
-        /* 2. 메인 컨테이너 (유리 효과) */
-        .container {
-            width: 90%;
-            max-width: 900px;
-            text-align: center;
-            border: 1px solid rgba(0, 255, 204, 0.1);
-            background: rgba(20, 20, 20, 0.6);
-            backdrop-filter: blur(10px); /* 뒤가 흐릿하게 비치는 효과 */
-            padding: 40px;
-            border-radius: 4px;
-            box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
-        }
-
-        /* 3. 제목 스타일 */
-        h1 { 
-            color: #00ffcc; 
-            margin-bottom: 10px; 
-            letter-spacing: 0.5rem;
-            text-shadow: 0 0 10px rgba(0, 255, 204, 0.3);
-            font-weight: 300;
-        }
-        .subtitle {
-            font-size: 0.9rem;
-            color: #666;
-            margin-bottom: 40px;
-            letter-spacing: 0.1rem;
-        }
-
-        /* 4. 메뉴 버튼 스타일 (네비게이션 바) */
-        .menu-bar {
+        /* 🔒 로그인 화면 (가장 위에 뜸) */
+        #login-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-color: #000;
+            z-index: 9999; /* 무조건 맨 위 */
             display: flex;
+            flex-direction: column;
             justify-content: center;
-            gap: 0; /* 버튼 사이 간격 없앰 (이어지는 느낌) */
-            flex-wrap: wrap;
-            margin-bottom: 30px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            align-items: center;
+            transition: opacity 1s ease;
         }
 
-        button {
-            background: transparent;
-            color: #888;
-            border: none;
-            padding: 15px 25px;
+        .login-box {
+            text-align: center;
+            border: 1px solid rgba(0, 255, 204, 0.3);
+            padding: 40px;
+            border-radius: 10px;
+            background: rgba(10, 10, 10, 0.9);
+            box-shadow: 0 0 30px rgba(0, 255, 204, 0.1);
+        }
+
+        .login-input {
+            background: #111;
+            border: 1px solid #333;
+            color: #00ffcc;
+            padding: 10px;
+            font-size: 1rem;
+            text-align: center;
+            margin-top: 20px;
+            width: 200px;
+            outline: none;
+            font-family: 'Pretendard';
+            letter-spacing: 2px;
+            text-transform: uppercase; /* 대문자로 자동 변환 */
+        }
+        
+        .login-input:focus { border-color: #00ffcc; box-shadow: 0 0 10px rgba(0,255,204,0.2); }
+
+        .login-btn {
+            margin-top: 15px;
+            background: rgba(0, 255, 204, 0.1);
+            color: #00ffcc;
+            border: 1px solid #00ffcc;
+            padding: 10px 30px;
             cursor: pointer;
             transition: 0.3s;
-            font-size: 1rem;
-            font-family: 'Pretendard', sans-serif;
-            border-bottom: 2px solid transparent;
         }
+        .login-btn:hover { background: #00ffcc; color: #000; }
 
-        button:hover { 
-            color: #fff; 
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        /* 클릭된 버튼 상태 */
-        button.active {
-            color: #00ffcc;
-            border-bottom: 2px solid #00ffcc;
-            font-weight: bold;
-        }
-
-        /* 미래자료실 전용 버튼 스타일 */
-        button#btn-mirae.active {
+        .error-msg {
             color: #ff3366;
-            border-bottom: 2px solid #ff3366;
-            text-shadow: 0 0 8px rgba(255, 51, 102, 0.4);
+            font-size: 0.8rem;
+            margin-top: 15px;
+            display: none; /* 평소엔 숨김 */
+            animation: shake 0.3s;
         }
 
-        /* 5. 콘텐츠 영역 */
-        .tab-content {
-            display: none;
-            text-align: left;
-            padding: 20px 10px;
-            line-height: 1.8;
-            animation: fadeIn 0.5s ease; /* 부드럽게 나타나는 효과 */
-        }
-        
-        .tab-content.active { display: block; }
-
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        h2 { 
-            font-size: 1.2rem; 
-            color: #fff; 
-            margin-bottom: 20px; 
-            display: flex; 
-            align-items: center; 
-        }
-        
-        /* 제목 앞의 작은 장식 */
-        h2::before {
-            content: '';
-            display: inline-block;
-            width: 4px;
-            height: 16px;
-            background: #00ffcc;
-            margin-right: 10px;
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+            100% { transform: translateX(0); }
         }
 
-        /* 카드 형태의 데이터 박스 */
-        .data-box {
-            background: rgba(255, 255, 255, 0.03);
-            padding: 20px;
-            border-radius: 4px;
-            margin-bottom: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+        /* ----- 기존 메인 콘텐츠 스타일 (로그인 후 보임) ----- */
+        .container {
+            width: 90%; max-width: 800px;
+            text-align: center;
+            border: 1px solid rgba(0, 255, 204, 0.15);
+            background: rgba(10, 10, 12, 0.8);
+            backdrop-filter: blur(15px);
+            padding: 50px 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.8);
+            display: none; /* 로그인 전에는 숨김 */
+            animation: fadeIn 2s ease;
         }
-        
-        strong { color: #00ffcc; font-weight: 600; }
-        
-        /* 미래자료실 강조 컬러 */
-        .mirae-theme h2::before { background: #ff3366; }
-        .mirae-theme strong { color: #ff3366; }
-    </style>
-</head>
-<body>
 
-    <div class="container">
-        <h1>TEUM ARCHIVE</h1>
-        <div class="subtitle">Records of Lost Beings</div>
-        
-        <div class="menu-bar">
-            <button class="menu-btn active" onclick="openTab('concept', this)">핵심개념</button>
-            <button class="menu-btn" onclick="openTab('org', this)">조직소개</button>
-            <button class="menu-btn" onclick="openTab('timeline', this)">이야기 연표</button>
-            <button class="menu-btn" onclick="openTab('story', this)">메인스토리</button>
-            <button class="menu-btn" id="btn-mirae" onclick="openTab('mirae', this)">미래자료실</button>
-        </div>
-
-        <div id="concept" class="tab-content active">
-            <h2>01 // Core Concepts</h2>
-            <div class="data-box">
-                <p><strong>공명체 (Resonator)</strong><br>
-                고차원 구조체인 '틈'과 동기화되어 물리 법칙을 무시하는 현상을 일으키는 매개체입니다.</p>
-            </div>
-            <div class="data-box">
-                <p><strong>반입자 에너지 (Antimatter)</strong><br>
-                초차원 에너지를 반물질 에너지로 발전시킨 형태로, '미래'의 핵심 기술력입니다.</p>
-            </div>
-        </div>
-
-        <div id="org" class="tab-content mirae-theme">
-            <h2>02 // Organization: MIRAE</h2>
-            <div class="data-box">
-                <p><strong>미래BIO (MIRAE BIO)</strong><br>
-                대외적으로는 바이오 기업이나, 실질적으로는 '틈'을 관리하는 조직입니다.</p>
-            </div>
-            <div class="data-box">
-                <p><strong>조직 구성</strong><br>
-                - 기획팀 (Strategy)<br>
-                - 연구팀 (R&D)<br>
-                - 회수팀 (Recovery)<br>
-                - 대응팀 (Response)</p>
-            </div>
-        </div>
-
-        <div id="timeline" class="tab-content">
-            <h2>03 // Chronology</h2>
-            <div class="data-box">
-                <p><strong>2019 Winter</strong><br>
-                이석은 담배연기를 들이마신다. 빛바랜 추억 속에는 벚꽃잎이 아른거린다.</p>
-            </div>
-            <div class="data-box">
-                <p><strong>Current Era</strong><br>
-                연화의 희생을 통해 미래의 로그가 지워지고, 세계에 자유의지가 부여됨.</p>
-            </div>
-        </div>
-
-        <div id="story" class="tab-content">
-            <h2>04 // Main Scenario</h2>
-            <div class="data-box">
-                <p><strong>1부: 불씨의 이름</strong><br>
-                희나와 희석의 서사가 시작되는 지점.</p>
-            </div>
-            <div class="data-box">
-                <p><strong>2부: 잔불 (Ember)</strong><br>
-                현재 집필 중인 2막 2편 시나리오.</p>
-            </div>
-        </div>
-
-        <div id="mirae" class="tab-content mirae-theme">
-            <h2>05 // M.BIO Confidential</h2>
-            <div class="data-box" style="border-color: rgba(255, 51, 102, 0.3);">
-                <p><strong>[접근 제한 구역]</strong><br>
-                4K 영상 자료 및 관측 로그 데이터가 보관되어 있습니다.<br>
-                <span style="font-size:0.8rem; opacity:0.6;">*인가된 인원만 열람 가능</span></p>
-            </div>
-        </div>
-
-    </div>
-
-    <script>
-        function openTab(tabId, btnElement) {
-            // 1. 모든 탭 내용 숨기기
-            var contents = document.querySelectorAll('.tab-content');
-            contents.forEach(function(item) {
-                item.classList.remove('active');
-            });
-
-            // 2. 모든 버튼의 불 끄기 (active 제거)
-            var buttons = document.querySelectorAll('.menu-btn');
-            buttons.forEach(function(btn) {
-                btn.classList.remove('active');
-            });
-
-            // 3. 선택한 탭 내용 보여주기
-            document.getElementById(tabId).classList.add('active');
-            
-            // 4. 클릭한 버튼 불 켜기 (active 추가)
-            btnElement.classList.add('active');
-        }
-    </script>
-
-</body>
-</html>
+        .page-section { display: none; animation: fadeIn 0.8s ease; }
+        .page-section.active { display: block; }
