@@ -1,4 +1,3 @@
-// script.js
 const database = {
     'concept': `<h2>01. 핵심개념</h2><p><strong>공명체:</strong> 틈과 동기화된 매개체</p><p><strong>반입자 에너지:</strong> 미래의 핵심 동력원</p>`,
     'org': `<h2>02. 조직 데이터</h2><p><strong>미래BIO:</strong> 기획, 연구, 회수, 대응팀으로 구성</p>`,
@@ -14,9 +13,11 @@ function playBeep(freq = 800, duration = 0.05) {
 function tryLogin() {
     playBeep(600, 0.1);
     const input = document.getElementById('passInput').value.toUpperCase();
+    
+    // 비밀번호 확인
     if (input === 'TEUM' || input === '2026') {
         
-        // ⭐ 음악 즉시 재생 기능 추가
+        // 1. 음악 재생
         var audio = document.getElementById("bgm");
         audio.volume = 0.5;
         audio.play().then(() => {
@@ -24,11 +25,20 @@ function tryLogin() {
             document.getElementById('sound-control').style.color = "#00ffcc";
         }).catch(e => { console.log(e); });
 
+        // 2. [연출] 입력창 숨기고 -> 환영 메시지 보여주기
+        document.getElementById('login-form').style.display = 'none'; // 입력창 끄기
+        document.getElementById('success-msg').style.display = 'block'; // 환영 메시지 켜기
+        playBeep(1200, 0.3); // 성공 효과음 삑!
+
+        // 3. 2초 뒤에 대시보드로 이동
         setTimeout(() => {
-            playBeep(1200, 0.2);
-            document.getElementById('login-screen').style.opacity = '0';
-            setTimeout(() => { document.getElementById('login-screen').style.display = 'none'; document.getElementById('dashboard').style.display = 'block'; }, 800);
-        }, 300);
+            document.getElementById('login-screen').style.opacity = '0'; // 서서히 사라짐
+            setTimeout(() => { 
+                document.getElementById('login-screen').style.display = 'none'; 
+                document.getElementById('dashboard').style.display = 'block'; 
+            }, 800);
+        }, 2000); // 여기서 2000이 2초 대기 시간입니다.
+
     } else {
         playBeep(150, 0.3); document.getElementById('msg').style.display = 'block';
     }
