@@ -6,7 +6,7 @@
     <title>틈(TEUM) 아카이브</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        /* 깜빡이는 효과 (글자가 반짝반짝) */
+        /* JS로 제어할 깜빡임 효과만 여기에 둠 */
         @keyframes blink { 0% { opacity: 1; } 100% { opacity: 0.5; } }
         .blink-text { animation: blink 0.5s infinite alternate; }
     </style>
@@ -30,7 +30,6 @@
                 <p style="font-size: 0.9rem; color: #fff;">관리자 권한 승인 완료.</p>
                 <p style="font-size: 0.8rem; color: #aaa;">시스템에 접속합니다...</p>
             </div>
-
         </div>
     </div>
 
@@ -48,6 +47,7 @@
     </div>
     
     <div id="sound-control" onclick="toggleSound()">🔈 BGM OFF</div>
+
     <script src="script.js"></script>
 </body>
 </html>
