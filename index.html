@@ -2,48 +2,128 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>틈(TEUM) 아카이브</title>
     <style>
-    body { 
-        background-color: #0a0a0c; /* 깊은 심연의 블랙 */
-        color: #e0e0e0; 
-        display: flex; 
-        flex-direction: column;
-        justify-content: center; 
-        align-items: center; 
-        height: 100vh; 
-        margin: 0;
-        font-family: 'Pretendard', sans-serif;
-        overflow: hidden;
-    }
-    .container { 
-        text-align: center; 
-        border: 1px solid rgba(0, 255, 204, 0.2); /* 은은한 초차원 에너지 빛 */
-        padding: 60px; 
-        border-radius: 5px;
-        background: rgba(255, 255, 255, 0.02);
-        backdrop-filter: blur(10px); /* 틈의 경계가 흐릿한 느낌 */
-    }
-    h1 { 
-        font-size: 2.5rem;
-        letter-spacing: 0.5rem;
-        color: #00ffcc; /* 공명체 발광색 */
-        text-shadow: 0 0 15px rgba(0, 255, 204, 0.5);
-        margin-bottom: 10px;
-    }
-    p { 
-        font-size: 1.1rem;
-        opacity: 0.7;
-        font-weight: 300;
-        font-style: italic;
-    }
-</style>
+        :root {
+            --point-color: #00ffcc; /* 공명체/에너지 색상 */
+            --mirae-color: #ff3366; /* 미래BIO 테마색 */
+            --bg-color: #0a0a0c;
+        }
+
+        body { 
+            background-color: var(--bg-color); 
+            color: #e0e0e0; 
+            margin: 0;
+            font-family: 'Pretendard', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .archive-container {
+            width: 90%;
+            max-width: 900px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(0, 255, 204, 0.2);
+            backdrop-filter: blur(20px);
+            border-radius: 10px;
+            padding: 40px;
+            box-shadow: 0 0 50px rgba(0,0,0,0.8);
+        }
+
+        header { text-align: center; margin-bottom: 40px; }
+        header h1 { 
+            letter-spacing: 0.8rem; 
+            color: var(--point-color); 
+            text-shadow: 0 0 15px rgba(0, 255, 204, 0.4);
+            margin: 0;
+        }
+        header p { opacity: 0.5; font-style: italic; font-size: 0.9rem; margin-top: 10px; }
+
+        /* 탭 메뉴 스타일 */
+        .tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .tab-btn {
+            padding: 12px 20px;
+            border: none;
+            background: none;
+            color: #888;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: 0.3s;
+            border-bottom: 2px solid transparent;
+        }
+
+        .tab-btn:hover { color: #fff; }
+        .tab-btn.active {
+            color: var(--point-color);
+            border-bottom: 2px solid var(--point-color);
+            font-weight: bold;
+        }
+
+        /* 미래자료실 전용 탭 스타일 */
+        .tab-btn.mirae-tab.active {
+            color: var(--mirae-color);
+            border-bottom-color: var(--mirae-color);
+        }
+
+        /* 콘텐츠 영역 */
+        .tab-content { display: none; line-height: 1.8; animation: slideUp 0.4s ease-out; }
+        .tab-content.active { display: block; }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 { font-size: 1.3rem; margin-bottom: 20px; color: #fff; }
+        .data-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+        }
+        .data-card strong { color: var(--point-color); }
+        .mirae-highlight { color: var(--mirae-color); border-left: 2px solid var(--mirae-color); padding-left: 15px; }
+
+        footer { text-align: center; margin-top: 40px; font-size: 0.7rem; opacity: 0.3; }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <h1>틈(TEUM) 아카이브</h1>
-        <p>유실된 존재들의 기록이 시작되는 곳</p>
-    </div>
-</body>
-</html>
 
+<div class="archive-container">
+    <header>
+        <h1>TEUM</h1>
+        <p>유실된 존재들의 기록 (Records of Lost Beings)</p>
+    </header>
+
+    <nav class="tabs">
+        <button class="tab-btn active" onclick="openTab(event, 'concept')">핵심개념</button>
+        <button class="tab-btn" onclick="openTab(event, 'org')">조직소개</button>
+        <button class="tab-btn" onclick="openTab(event, 'timeline')">이야기 연표</button>
+        <button class="tab-btn" onclick="openTab(event, 'story')">메인스토리</button>
+        <button class="tab-btn mirae-tab" onclick="openTab(event, 'mirae')">미래자료실</button>
+    </nav>
+
+    <div id="concept" class="tab-content active">
+        <h2>01 // Core Concepts</h2>
+        <div class="data-card">
+            <strong>공명체 (Resonator):</strong> 고차원 구조체인 '틈'과 동기화되어 물리 법칙을 간섭하는 매개체입니다.
+        </div>
+        <div class="data-card">
+            <strong>반입자 에너지 (Antimatter Energy):</strong> 초차원 에너지를 정제하여 '미래' 조직이 사용하는 주 동력원입니다.
+        </div>
+    </div>
+
+    <div id="org" class="tab-content">
+        <h2>02 // Organizations</h2>
+        <div class="data-card
