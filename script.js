@@ -16,7 +16,7 @@ function playBeep(freq = 800, duration = 0.05) {
 function tryLogin() {
     playBeep(600, 0.1);
     const input = document.getElementById('passInput').value.toUpperCase();
-    if (input === 'TEUM' || input === '2026') {
+    if (input === '홍성민' || input === '이준하') {
         setTimeout(() => {
             playBeep(1200, 0.2);
             document.getElementById('login-screen').style.opacity = '0';
