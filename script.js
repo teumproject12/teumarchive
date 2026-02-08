@@ -63,7 +63,7 @@ function tryLogin() {
     // 🥚 이스터에그 1: MIRAE (적대 조직)
     } else if (input === 'MIRAE' || input === '미래') {
         playBeep(100, 0.5, 0.2); 
-        document.body.style.backgroundColor = '#300'; // 배경 붉게
+        document.body.style.backgroundColor = '#ff0000'; // 배경 붉게
         loginBox.style.borderColor = '#ff0000'; // 테두리 붉게
         msgBox.innerHTML = "⚠ WARNING: IP TRACKING STARTED.<br>(위치 추적 신호가 감지되었습니다)";
         msgBox.style.display = 'block';
@@ -72,6 +72,7 @@ function tryLogin() {
     // 🥚 이스터에그 2: HELP (구조 요청)
     } else if (input === 'HELP' || input === 'SOS') {
         playBeep(1500, 0.1, 0.1); playBeep(1500, 0.1, 0.1); 
+        loginBox.style.borderColor = '#ff0000'; // 테두리 붉게
         msgBox.innerHTML = "... 들리나요? ...제발...<br>...";
         msgBox.style.color = '#ff0000'; 
         msgBox.style.display = 'block';
