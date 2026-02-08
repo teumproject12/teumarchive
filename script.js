@@ -1,4 +1,4 @@
-/* script.js - 최종 타자기 버전 */
+/* script.js - Ver 3.0 (Hidden Easter Eggs) */
 
 const database = {
     'concept': `<h2>01. 핵심개념</h2><br><p><strong>[시스템 로그]</strong> 데이터 로딩 중...</p><br><p><strong>공명체 (Resonator):</strong><br> - 틈(Teum)과 동기화된 인간 매개체.<br> - 특정 파장을 통해 차원 간 간섭 가능.<br></p><br><p><strong>반입자 에너지 (Antimatter):</strong><br> - 미래(Mirae) 조직의 핵심 동력원.<br> - 불안정하지만 고효율의 출력을 냄.<br></p>`,
@@ -15,23 +15,31 @@ const database = {
 /* --- [시스템 기능] --- */
 let typingTimer = null;
 
-// 삑 소리 함수
-function playBeep(freq = 800, duration = 0.05) {
+function playBeep(freq = 800, duration = 0.05, vol = 0.05) {
     try { 
         const ctx = new (window.AudioContext || window.webkitAudioContext)(); 
         const osc = ctx.createOscillator(); 
         const gain = ctx.createGain(); 
         osc.connect(gain); gain.connect(ctx.destination); 
-        osc.type = 'square'; osc.frequency.value = freq; gain.gain.value = 0.05; 
+        osc.type = 'square'; osc.frequency.value = freq; gain.gain.value = vol; 
         osc.start(); setTimeout(() => osc.stop(), duration * 1000); 
     } catch(e) {}
 }
 
-// 로그인 함수
 function tryLogin() {
     playBeep(600, 0.1);
+    // 대문자로 변환해서 받음 (소문자로 쳐도 됨)
     const input = document.getElementById('passInput').value.toUpperCase();
-    
+    const msgBox = document.getElementById('msg');
+    const loginBox = document.querySelector('.login-box');
+
+    // 1. 초기화 (빨간색 경고 끄기)
+    msgBox.style.display = 'none';
+    msgBox.style.color = '#ff3366';
+    loginBox.style.borderColor = '#00ffcc';
+    document.body.style.backgroundColor = '#050505';
+
+    // 2. 로그인 성공 (비밀번호: TEUM 또는 2026)
     if (input === 'TEUM' || input === '2026') {
         var audio = document.getElementById("bgm");
         audio.volume = 0.5;
@@ -53,49 +61,54 @@ function tryLogin() {
                 document.getElementById('dashboard').style.display = 'block'; 
             }, 800);
         }, 2000);
+
+    // 🥚 이스터에그 1: MIRAE (적대 조직)
+    } else if (input === 'MIRAE' || input === '미래') {
+        playBeep(100, 0.5, 0.2); // 낮은 경고음
+        document.body.style.backgroundColor = '#300'; // 배경을 붉게
+        loginBox.style.borderColor = '#ff0000'; // 테두리도 붉게
+        msgBox.innerHTML = "⚠ WARNING: IP TRACKING STARTED.<br>(위치 추적 신호가 감지되었습니다)";
+        msgBox.style.display = 'block';
+        msgBox.style.color = '#ff0000';
+    
+    // 🥚 이스터에그 2: HELP (구조 요청)
+    } else if (input === 'HELP' || input === 'SOS') {
+        playBeep(1500, 0.1, 0.1); playBeep(1500, 0.1, 0.1); // 삐-삐-
+        msgBox.innerHTML = "...치직... 들리나요? ...제발...<br>...이 로그를 지워주세요...";
+        msgBox.style.color = '#888'; // 회색 글씨
+        msgBox.style.display = 'block';
+
+    // 3. 로그인 실패
     } else {
         playBeep(150, 0.3); 
-        document.getElementById('msg').style.display = 'block';
+        msgBox.innerHTML = "⚠ ERROR: ACCESS DENIED"; // 원래 메시지로 복구
+        msgBox.style.display = 'block';
     }
 }
 
-// ⭐ 타자기 효과 함수 (여기가 핵심!)
+// 타자기 효과
 function typeText(htmlContent, elementId, speed = 15) {
     const target = document.getElementById(elementId);
     target.innerHTML = ""; 
     let i = 0;
-    
     if (typingTimer) clearInterval(typingTimer);
-
     typingTimer = setInterval(() => {
-        if (i >= htmlContent.length) {
-            clearInterval(typingTimer);
-            return;
-        }
+        if (i >= htmlContent.length) { clearInterval(typingTimer); return; }
         let char = htmlContent[i];
         if (char === '<') {
             let tag = "";
-            while (htmlContent[i] !== '>' && i < htmlContent.length) {
-                tag += htmlContent[i];
-                i++;
-            }
-            tag += '>';
-            i++;
-            target.innerHTML += tag;
+            while (htmlContent[i] !== '>' && i < htmlContent.length) { tag += htmlContent[i]; i++; }
+            tag += '>'; i++; target.innerHTML += tag;
         } else {
-            target.innerHTML += char;
-            i++;
+            target.innerHTML += char; i++;
         }
         target.scrollTop = target.scrollHeight;
     }, speed);
 }
 
-// 파일 열기 (타자기 효과 적용)
 function openFile(id) { 
     playBeep(1000, 0.05); 
     document.getElementById('file-viewer').style.display = 'block'; 
-    
-    // 여기가 중요합니다! typeText 함수를 써야 함
     typeText(database[id], 'viewer-content');
 }
 
