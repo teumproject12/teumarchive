@@ -29,7 +29,7 @@ function tryLogin() {
         
         // 2. 음악 재생 (즉시)
         var audio = document.getElementById("bgm");
-        audio.volume = 0.5;
+        audio.volume = 1.0;
         audio.play().then(() => {
             document.getElementById('sound-control').innerHTML = "🔊 BGM ON";
             document.getElementById('sound-control').style.color = "#00ffcc";
