@@ -6,8 +6,8 @@
     <title>틈(TEUM) 아카이브</title>
     <style>
         :root {
-            --point-color: #00ffcc; /* 공명체/에너지 색상 */
-            --mirae-color: #ff3366; /* 미래BIO 테마색 */
+            --point-color: #00ffcc;
+            --mirae-color: #ff3366;
             --bg-color: #0a0a0c;
         }
 
@@ -30,23 +30,16 @@
             backdrop-filter: blur(20px);
             border-radius: 10px;
             padding: 40px;
-            box-shadow: 0 0 50px rgba(0,0,0,0.8);
         }
 
         header { text-align: center; margin-bottom: 40px; }
-        header h1 { 
-            letter-spacing: 0.8rem; 
-            color: var(--point-color); 
-            text-shadow: 0 0 15px rgba(0, 255, 204, 0.4);
-            margin: 0;
-        }
-        header p { opacity: 0.5; font-style: italic; font-size: 0.9rem; margin-top: 10px; }
+        header h1 { letter-spacing: 0.8rem; color: var(--point-color); margin: 0; }
 
-        /* 탭 메뉴 스타일 */
+        /* 탭 버튼 스타일 */
         .tabs {
             display: flex;
             flex-wrap: wrap;
-            gap: 5px;
+            gap: 10px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             margin-bottom: 30px;
         }
@@ -58,72 +51,30 @@
             color: #888;
             cursor: pointer;
             font-size: 0.9rem;
-            transition: 0.3s;
             border-bottom: 2px solid transparent;
         }
 
-        .tab-btn:hover { color: #fff; }
         .tab-btn.active {
             color: var(--point-color);
             border-bottom: 2px solid var(--point-color);
             font-weight: bold;
         }
 
-        /* 미래자료실 전용 탭 스타일 */
-        .tab-btn.mirae-tab.active {
-            color: var(--mirae-color);
-            border-bottom-color: var(--mirae-color);
+        /* 콘텐츠 영역 - 기본적으로 모두 숨김 */
+        .tab-content { 
+            display: none; 
+            line-height: 1.8; 
         }
 
-        /* 콘텐츠 영역 */
-        .tab-content { display: none; line-height: 1.8; animation: slideUp 0.4s ease-out; }
-        .tab-content.active { display: block; }
-
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        /* active 클래스가 붙은 것만 보여줌 */
+        .tab-content.active { 
+            display: block; 
+            animation: fadeIn 0.3s ease-in;
         }
 
-        h2 { font-size: 1.3rem; margin-bottom: 20px; color: #fff; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
         .data-card {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.05);
             padding: 20px;
-            margin-bottom: 15px;
-            border-radius: 5px;
-        }
-        .data-card strong { color: var(--point-color); }
-        .mirae-highlight { color: var(--mirae-color); border-left: 2px solid var(--mirae-color); padding-left: 15px; }
-
-        footer { text-align: center; margin-top: 40px; font-size: 0.7rem; opacity: 0.3; }
-    </style>
-</head>
-<body>
-
-<div class="archive-container">
-    <header>
-        <h1>TEUM</h1>
-        <p>유실된 존재들의 기록 (Records of Lost Beings)</p>
-    </header>
-
-    <nav class="tabs">
-        <button class="tab-btn active" onclick="openTab(event, 'concept')">핵심개념</button>
-        <button class="tab-btn" onclick="openTab(event, 'org')">조직소개</button>
-        <button class="tab-btn" onclick="openTab(event, 'timeline')">이야기 연표</button>
-        <button class="tab-btn" onclick="openTab(event, 'story')">메인스토리</button>
-        <button class="tab-btn mirae-tab" onclick="openTab(event, 'mirae')">미래자료실</button>
-    </nav>
-
-    <div id="concept" class="tab-content active">
-        <h2>01 // Core Concepts</h2>
-        <div class="data-card">
-            <strong>공명체 (Resonator):</strong> 고차원 구조체인 '틈'과 동기화되어 물리 법칙을 간섭하는 매개체입니다.
-        </div>
-        <div class="data-card">
-            <strong>반입자 에너지 (Antimatter Energy):</strong> 초차원 에너지를 정제하여 '미래' 조직이 사용하는 주 동력원입니다.
-        </div>
-    </div>
-
-    <div id="org" class="tab-content">
-        <h2>02 // Organizations</h2>
-        <div class="data-card
