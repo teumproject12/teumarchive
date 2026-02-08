@@ -71,7 +71,8 @@ function tryLogin() {
     
     // 🥚 이스터에그 2: HELP (구조 요청)
     } else if (input === 'HELP' || input === 'SOS') {
-        playBeep(1500, 0.1, 0.1); playBeep(1500, 0.1, 0.1); 
+        playBeep(1500, 0.1, 0.1); playBeep(1500, 0.1, 0.1);
+        document.body.style.backgroundColor = '#ff0000'; // 배경 붉게
         loginBox.style.borderColor = '#ff0000'; // 테두리 붉게
         msgBox.innerHTML = "... 들리나요? ...제발...<br>...";
         msgBox.style.color = '#ff0000'; 
