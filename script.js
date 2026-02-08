@@ -74,7 +74,7 @@ function tryLogin() {
     // 🥚 이스터에그 2: HELP (구조 요청)
     } else if (input === 'HELP' || input === 'SOS') {
         playBeep(1500, 0.1, 0.1); playBeep(1500, 0.1, 0.1); // 삐-삐-
-        msgBox.innerHTML = "...치직... 들리나요? ...제발...<br>...이 로그를 지워주세요...";
+        msgBox.innerHTML = "...치직... 들리나요? ...제발...<br>...구해주세요...";
         msgBox.style.color = '#888'; // 회색 글씨
         msgBox.style.display = 'block';
 
