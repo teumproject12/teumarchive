@@ -1,3 +1,5 @@
+/* script.js */
+
 const database = {
     'concept': `<h2>01. 핵심개념</h2><p><strong>공명체:</strong> 틈과 동기화된 매개체</p><p><strong>반입자 에너지:</strong> 미래의 핵심 동력원</p>`,
     'org': `<h2>02. 조직 데이터</h2><p><strong>미래BIO:</strong> 기획, 연구, 회수, 대응팀으로 구성</p>`,
@@ -7,17 +9,25 @@ const database = {
 };
 
 function playBeep(freq = 800, duration = 0.05) {
-    try { const ctx = new (window.AudioContext || window.webkitAudioContext)(); const osc = ctx.createOscillator(); const gain = ctx.createGain(); osc.connect(gain); gain.connect(ctx.destination); osc.type = 'square'; osc.frequency.value = freq; gain.gain.value = 0.05; osc.start(); setTimeout(() => osc.stop(), duration * 1000); } catch(e) {}
+    try { 
+        const ctx = new (window.AudioContext || window.webkitAudioContext)(); 
+        const osc = ctx.createOscillator(); 
+        const gain = ctx.createGain(); 
+        osc.connect(gain); gain.connect(ctx.destination); 
+        osc.type = 'square'; osc.frequency.value = freq; gain.gain.value = 0.05; 
+        osc.start(); setTimeout(() => osc.stop(), duration * 1000); 
+    } catch(e) {}
 }
 
 function tryLogin() {
+    // 1. 버튼 누르는 소리
     playBeep(600, 0.1);
     const input = document.getElementById('passInput').value.toUpperCase();
     
-    // 비밀번호 확인
+    // 비밀번호 확인 (TEUM 또는 2026)
     if (input === 'TEUM' || input === '2026') {
         
-        // 1. 음악 재생
+        // 2. 음악 재생 (즉시)
         var audio = document.getElementById("bgm");
         audio.volume = 0.5;
         audio.play().then(() => {
@@ -25,28 +35,52 @@ function tryLogin() {
             document.getElementById('sound-control').style.color = "#00ffcc";
         }).catch(e => { console.log(e); });
 
-        // 2. [연출] 입력창 숨기고 -> 환영 메시지 보여주기
-        document.getElementById('login-form').style.display = 'none'; // 입력창 끄기
-        document.getElementById('success-msg').style.display = 'block'; // 환영 메시지 켜기
+        // 3. [핵심] 입력창 숨기고 -> 환영 메시지 보여주기
+        // (이 부분이 없으면 예전처럼 바로 넘어갑니다!)
+        if(document.getElementById('login-form')) {
+            document.getElementById('login-form').style.display = 'none'; // 입력창 끄기
+            document.getElementById('success-msg').style.display = 'block'; // 메시지 켜기
+        }
+        
         playBeep(1200, 0.3); // 성공 효과음 삑!
 
-        // 3. 2초 뒤에 대시보드로 이동
+        // 4. 2초 뒤에 대시보드로 이동 (지연 효과)
         setTimeout(() => {
-            document.getElementById('login-screen').style.opacity = '0'; // 서서히 사라짐
+            document.getElementById('login-screen').style.opacity = '0'; // 페이드 아웃
             setTimeout(() => { 
                 document.getElementById('login-screen').style.display = 'none'; 
                 document.getElementById('dashboard').style.display = 'block'; 
             }, 800);
-        }, 2000); // 여기서 2000이 2초 대기 시간입니다.
+        }, 2000); // 2000 = 2초 기다림
 
     } else {
-        playBeep(150, 0.3); document.getElementById('msg').style.display = 'block';
+        // 실패했을 때
+        playBeep(150, 0.3); 
+        document.getElementById('msg').style.display = 'block';
     }
 }
 
-function openFile(id) { playBeep(1000, 0.05); document.getElementById('viewer-content').innerHTML = database[id]; document.getElementById('file-viewer').style.display = 'block'; }
-function closeFile() { playBeep(600, 0.05); document.getElementById('file-viewer').style.display = 'none'; }
+function openFile(id) { 
+    playBeep(1000, 0.05); 
+    document.getElementById('viewer-content').innerHTML = database[id]; 
+    document.getElementById('file-viewer').style.display = 'block'; 
+}
+
+function closeFile() { 
+    playBeep(600, 0.05); 
+    document.getElementById('file-viewer').style.display = 'none'; 
+}
+
 function toggleSound() {
-    var audio = document.getElementById("bgm"); var btn = document.getElementById("sound-control");
-    if (audio.paused) { audio.play(); btn.innerHTML = "🔊 BGM ON"; btn.style.color = "#00ffcc"; } else { audio.pause(); btn.innerHTML = "🔈 BGM OFF"; btn.style.color = "#555"; }
+    var audio = document.getElementById("bgm"); 
+    var btn = document.getElementById("sound-control");
+    if (audio.paused) { 
+        audio.play(); 
+        btn.innerHTML = "🔊 BGM ON"; 
+        btn.style.color = "#00ffcc"; 
+    } else { 
+        audio.pause(); 
+        btn.innerHTML = "🔈 BGM OFF"; 
+        btn.style.color = "#555"; 
+    }
 }
