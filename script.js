@@ -1,4 +1,4 @@
-/* script.js - Ver 3.0 (Easter Eggs Included) */
+/* script.js - Ver 4.0 (Red Alert Fixed) */
 
 const database = {
     'concept': `<h2>01. 핵심개념</h2><br><p><strong>[시스템 로그]</strong> 데이터 로딩 중...</p><br><p><strong>공명체 (Resonator):</strong><br> - 틈(Teum)과 동기화된 인간 매개체.<br> - 특정 파장을 통해 차원 간 간섭 가능.<br></p><br><p><strong>반입자 에너지 (Antimatter):</strong><br> - 미래(Mirae) 조직의 핵심 동력원.<br> - 불안정하지만 고효율의 출력을 냄.<br></p>`,
@@ -10,7 +10,6 @@ const database = {
 
 let typingTimer = null;
 
-// 삑 소리 함수
 function playBeep(freq = 800, duration = 0.05, vol = 0.05) {
     try { 
         const ctx = new (window.AudioContext || window.webkitAudioContext)(); 
@@ -22,19 +21,21 @@ function playBeep(freq = 800, duration = 0.05, vol = 0.05) {
     } catch(e) {}
 }
 
-// 로그인 함수 (이스터에그 포함)
+// ⭐ 여기가 수정되었습니다!
 function tryLogin() {
     playBeep(600, 0.1);
     
     const input = document.getElementById('passInput').value.toUpperCase();
     const msgBox = document.getElementById('msg');
     const loginBox = document.querySelector('.login-box');
+    const loginScreen = document.getElementById('login-screen'); // 커튼을 잡음
 
-    // 1. 스타일 초기화 (붉은 화면 등 리셋)
+    // 1. [초기화] 원래 색으로 복구
     msgBox.style.display = 'none';
     msgBox.style.color = '#ff3366';
     loginBox.style.borderColor = '#00ffcc';
-    document.body.style.backgroundColor = '#050505';
+    loginScreen.style.backgroundColor = '#000'; // 배경 검은색으로 리셋
+    loginScreen.style.backgroundImage = 'none'; // 그라데이션 제거
 
     // 2. 로그인 성공
     if (input === 'TEUM' || input === '2026') {
@@ -45,7 +46,6 @@ function tryLogin() {
             document.getElementById('sound-control').style.color = "#00ffcc";
         }).catch(e => { console.log(e); });
 
-        // 화면 전환
         if(document.getElementById('login-form')) {
             document.getElementById('login-form').style.display = 'none';
             document.getElementById('success-msg').style.display = 'block';
@@ -60,22 +60,23 @@ function tryLogin() {
             }, 800);
         }, 2000);
 
-    // 🥚 이스터에그 1: MIRAE (적대 조직)
+    // 🥚 이스터에그 1: MIRAE (화면 전체 붉게!)
     } else if (input === 'MIRAE' || input === '미래') {
         playBeep(100, 0.5, 0.2); 
-        document.body.style.backgroundColor = '#ff0000'; // 배경 붉게
-        loginBox.style.borderColor = '#ff0000'; // 테두리 붉게
+        
+        // ⭐ 핵심: 화면 전체를 붉은 그라데이션으로 덮어버림
+        loginScreen.style.background = 'radial-gradient(circle, #500 0%, #200 100%)';
+        loginBox.style.borderColor = '#ff0000'; 
+        
         msgBox.innerHTML = "⚠ WARNING: IP TRACKING STARTED.<br>(위치 추적 신호가 감지되었습니다)";
         msgBox.style.display = 'block';
         msgBox.style.color = '#ff0000';
     
-    // 🥚 이스터에그 2: HELP (구조 요청)
+    // 🥚 이스터에그 2: HELP
     } else if (input === 'HELP' || input === 'SOS') {
-        playBeep(1500, 0.1, 0.1); playBeep(1500, 0.1, 0.1);
-        document.body.style.backgroundColor = '#ff0000'; // 배경 붉게
-        loginBox.style.borderColor = '#ff0000'; // 테두리 붉게
-        msgBox.innerHTML = "... 들리나요? ...제발...<br>...";
-        msgBox.style.color = '#ff0000'; 
+        playBeep(1500, 0.1, 0.1); playBeep(1500, 0.1, 0.1); 
+        msgBox.innerHTML = "...치직... 들리나요? ...제발...<br>...이 로그를 지워주세요...";
+        msgBox.style.color = '#888'; 
         msgBox.style.display = 'block';
 
     // 3. 실패
