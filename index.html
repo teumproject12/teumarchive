@@ -5,76 +5,118 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>틈(TEUM) 아카이브</title>
     <style>
-        :root {
-            --point-color: #00ffcc;
-            --mirae-color: #ff3366;
-            --bg-color: #0a0a0c;
-        }
-
-        body { 
-            background-color: var(--bg-color); 
-            color: #e0e0e0; 
-            margin: 0;
-            font-family: 'Pretendard', sans-serif;
+        body {
+            background-color: #0a0a0c;
+            color: #ffffff;
+            font-family: sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
+            margin: 0;
         }
 
-        .archive-container {
+        .container {
             width: 90%;
-            max-width: 900px;
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(0, 255, 204, 0.2);
-            backdrop-filter: blur(20px);
-            border-radius: 10px;
-            padding: 40px;
-        }
-
-        header { text-align: center; margin-bottom: 40px; }
-        header h1 { letter-spacing: 0.8rem; color: var(--point-color); margin: 0; }
-
-        /* 탭 버튼 스타일 */
-        .tabs {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            margin-bottom: 30px;
-        }
-
-        .tab-btn {
-            padding: 12px 20px;
-            border: none;
-            background: none;
-            color: #888;
-            cursor: pointer;
-            font-size: 0.9rem;
-            border-bottom: 2px solid transparent;
-        }
-
-        .tab-btn.active {
-            color: var(--point-color);
-            border-bottom: 2px solid var(--point-color);
-            font-weight: bold;
-        }
-
-        /* 콘텐츠 영역 - 기본적으로 모두 숨김 */
-        .tab-content { 
-            display: none; 
-            line-height: 1.8; 
-        }
-
-        /* active 클래스가 붙은 것만 보여줌 */
-        .tab-content.active { 
-            display: block; 
-            animation: fadeIn 0.3s ease-in;
-        }
-
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        .data-card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            max-width: 800px;
+            text-align: center;
+            border: 1px solid #333;
             padding: 20px;
+            border-radius: 10px;
+        }
+
+        h1 { color: #00ffcc; margin-bottom: 30px; }
+
+        /* 메뉴 버튼 스타일 */
+        .menu-bar {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        button {
+            background: #222;
+            color: #fff;
+            border: 1px solid #444;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover { background: #333; border-color: #00ffcc; }
+        
+        /* 탭 내용 스타일 */
+        .tab-content {
+            display: none; /* 기본적으로 숨김 */
+            background: #111;
+            padding: 20px;
+            border: 1px solid #333;
+            text-align: left;
+            line-height: 1.6;
+        }
+
+        /* 활성화된 탭만 보이기 */
+        .tab-content.active { display: block; }
+
+        h2 { color: #00ffcc; font-size: 1.2rem; border-bottom: 1px solid #333; padding-bottom: 10px;}
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>TEUM ARCHIVE</h1>
+        
+        <div class="menu-bar">
+            <button onclick="openTab('concept')">핵심개념</button>
+            <button onclick="openTab('org')">조직소개</button>
+            <button onclick="openTab('timeline')">이야기 연표</button>
+            <button onclick="openTab('story')">메인스토리</button>
+            <button onclick="openTab('mirae')" style="color:#ff3366; border-color:#ff3366;">미래자료실</button>
+        </div>
+
+        <div id="concept" class="tab-content active">
+            <h2>01 // 핵심개념</h2>
+            <p>- <strong>공명체:</strong> 틈과 동기화된 매개체</p>
+            <p>- <strong>반입자 에너지:</strong> 초차원 에너지를 정제한 동력원</p>
+        </div>
+
+        <div id="org" class="tab-content">
+            <h2>02 // 조직소개 (MIRAE BIO)</h2>
+            <p>- 기획팀, 연구팀, 회수팀, 대응팀으로 구성</p>
+        </div>
+
+        <div id="timeline" class="tab-content">
+            <h2>03 // 이야기 연표</h2>
+            <p>- 2019년 겨울: 이석의 기억</p>
+            <p>- 현재: 연화의 희생과 자유의지의 시작</p>
+        </div>
+
+        <div id="story" class="tab-content">
+            <h2>04 // 메인스토리 (잔불)</h2>
+            <p>- 불씨의 이름 (1편) -> 잔불 (2막 2편 진행중)</p>
+        </div>
+
+        <div id="mirae" class="tab-content">
+            <h2 style="color:#ff3366">05 // 미래자료실 (M.BIO)</h2>
+            <p>- [기밀] 4K 관측 로그 데이터</p>
+        </div>
+
+    </div>
+
+    <script>
+        function openTab(tabId) {
+            // 1. 모든 내용을 숨긴다
+            var contents = document.querySelectorAll('.tab-content');
+            contents.forEach(function(item) {
+                item.classList.remove('active');
+            });
+
+            // 2. 선택한 내용만 보여준다
+            document.getElementById(tabId).classList.add('active');
+        }
+    </script>
+
+</body>
+</html>
