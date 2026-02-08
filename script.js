@@ -1,6 +1,5 @@
-/* script.js - Ver 2.0 (Typewriter Effect) */
+/* script.js - 최종 타자기 버전 */
 
-// [데이터베이스] 여기에 진짜 설정을 채워 넣으시면 됩니다.
 const database = {
     'concept': `<h2>01. 핵심개념</h2><br><p><strong>[시스템 로그]</strong> 데이터 로딩 중...</p><br><p><strong>공명체 (Resonator):</strong><br> - 틈(Teum)과 동기화된 인간 매개체.<br> - 특정 파장을 통해 차원 간 간섭 가능.<br></p><br><p><strong>반입자 에너지 (Antimatter):</strong><br> - 미래(Mirae) 조직의 핵심 동력원.<br> - 불안정하지만 고효율의 출력을 냄.<br></p>`,
     
@@ -14,28 +13,26 @@ const database = {
 };
 
 /* --- [시스템 기능] --- */
+let typingTimer = null;
 
-let typingTimer = null; // 타자기 효과를 제어하는 변수
-
-// 삑 소리 내기 (효과음)
-function playBeep(freq = 800, duration = 0.05, vol = 0.05) {
+// 삑 소리 함수
+function playBeep(freq = 800, duration = 0.05) {
     try { 
         const ctx = new (window.AudioContext || window.webkitAudioContext)(); 
         const osc = ctx.createOscillator(); 
         const gain = ctx.createGain(); 
         osc.connect(gain); gain.connect(ctx.destination); 
-        osc.type = 'square'; osc.frequency.value = freq; gain.gain.value = vol; 
+        osc.type = 'square'; osc.frequency.value = freq; gain.gain.value = 0.05; 
         osc.start(); setTimeout(() => osc.stop(), duration * 1000); 
     } catch(e) {}
 }
 
-// 로그인 기능
+// 로그인 함수
 function tryLogin() {
-    playBeep(600, 0.1); // 버튼음
+    playBeep(600, 0.1);
     const input = document.getElementById('passInput').value.toUpperCase();
     
     if (input === 'TEUM' || input === '2026') {
-        // 음악 재생
         var audio = document.getElementById("bgm");
         audio.volume = 0.5;
         audio.play().then(() => {
@@ -43,12 +40,11 @@ function tryLogin() {
             document.getElementById('sound-control').style.color = "#00ffcc";
         }).catch(e => { console.log(e); });
 
-        // 화면 전환 연출
         if(document.getElementById('login-form')) {
             document.getElementById('login-form').style.display = 'none';
             document.getElementById('success-msg').style.display = 'block';
         }
-        playBeep(1200, 0.3); // 성공음
+        playBeep(1200, 0.3);
 
         setTimeout(() => {
             document.getElementById('login-screen').style.opacity = '0';
@@ -63,26 +59,20 @@ function tryLogin() {
     }
 }
 
-// ⭐ [핵심] 타자기 효과 함수 (Typewriter Effect)
+// ⭐ 타자기 효과 함수 (여기가 핵심!)
 function typeText(htmlContent, elementId, speed = 15) {
     const target = document.getElementById(elementId);
-    target.innerHTML = ""; // 기존 내용 지우기
+    target.innerHTML = ""; 
     let i = 0;
     
-    // 혹시 이전에 돌고 있던 타이핑이 있다면 멈춤
     if (typingTimer) clearInterval(typingTimer);
 
     typingTimer = setInterval(() => {
-        // 글자가 다 나오면 멈춤
         if (i >= htmlContent.length) {
             clearInterval(typingTimer);
             return;
         }
-
         let char = htmlContent[i];
-
-        // 만약 '<' 가 나오면 (HTML 태그 시작), '>' 가 나올 때까지 한 번에 출력
-        // (안 그러면 태그가 깨져서 화면이 이상해짐)
         if (char === '<') {
             let tag = "";
             while (htmlContent[i] !== '>' && i < htmlContent.length) {
@@ -91,19 +81,13 @@ function typeText(htmlContent, elementId, speed = 15) {
             }
             tag += '>';
             i++;
-            target.innerHTML += tag; // 태그는 한방에 추가
+            target.innerHTML += tag;
         } else {
-            // 일반 글자는 한 글자씩 추가
             target.innerHTML += char;
             i++;
-            // 타자기 소리 (너무 시끄러우면 아래 줄 삭제하세요)
-            if (i % 3 === 0) playBeep(800, 0.01, 0.02); 
         }
-
-        // 스크롤을 항상 맨 아래로 유지
         target.scrollTop = target.scrollHeight;
-
-    }, speed); // 속도 조절 (숫자가 작을수록 빠름)
+    }, speed);
 }
 
 // 파일 열기 (타자기 효과 적용)
@@ -111,22 +95,17 @@ function openFile(id) {
     playBeep(1000, 0.05); 
     document.getElementById('file-viewer').style.display = 'block'; 
     
-    // 그냥 보여주는 게 아니라, 타자기 함수를 실행!
+    // 여기가 중요합니다! typeText 함수를 써야 함
     typeText(database[id], 'viewer-content');
 }
 
-// 파일 닫기
 function closeFile() { 
     playBeep(600, 0.05); 
-    
-    // 창 닫으면 타이핑도 멈춰야 함 (안 그러면 뒤에서 계속 소리남)
     if (typingTimer) clearInterval(typingTimer);
-    
     document.getElementById('file-viewer').style.display = 'none'; 
-    document.getElementById('viewer-content').innerHTML = ""; // 내용 비우기
+    document.getElementById('viewer-content').innerHTML = ""; 
 }
 
-// 소리 끄기/켜기
 function toggleSound() {
     var audio = document.getElementById("bgm"); 
     var btn = document.getElementById("sound-control");
