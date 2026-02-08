@@ -4,100 +4,173 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>틈(TEUM) 아카이브</title>
-    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
     <style>
+        /* 기본 초기화 */
+        * { box-sizing: border-box; }
+        
         body {
-            background-color: #050505;
-            color: #e0e0e0;
-            font-family: 'Pretendard', sans-serif;
+            background-color: #000000; /* 완전 검정 */
+            color: #ffffff;
+            font-family: sans-serif; /* 기본 폰트 사용 (오류 방지) */
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            overflow: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            overflow: hidden;
         }
 
-        /* 🔒 로그인 화면 (가장 위에 뜸) */
-        #login-overlay {
+        /* 🔐 로그인 화면 (무조건 맨 위에 뜨게 설정) */
+        #login-screen {
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            background-color: #000;
-            z-index: 9999; /* 무조건 맨 위 */
+            background-color: #000000;
+            z-index: 9999;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            transition: opacity 1s ease;
         }
 
         .login-box {
-            text-align: center;
-            border: 1px solid rgba(0, 255, 204, 0.3);
+            border: 2px solid #00ffcc; /* 테두리 강조 */
             padding: 40px;
             border-radius: 10px;
-            background: rgba(10, 10, 10, 0.9);
-            box-shadow: 0 0 30px rgba(0, 255, 204, 0.1);
+            text-align: center;
+            background-color: #111;
+            max-width: 90%;
         }
 
-        .login-input {
-            background: #111;
-            border: 1px solid #333;
-            color: #00ffcc;
-            padding: 10px;
-            font-size: 1rem;
+        h2 { color: #00ffcc; margin-top: 0; }
+
+        input {
+            background: #222;
+            border: 1px solid #555;
+            color: #fff;
+            padding: 15px;
+            font-size: 1.2rem;
+            margin: 20px 0;
             text-align: center;
-            margin-top: 20px;
             width: 200px;
-            outline: none;
-            font-family: 'Pretendard';
-            letter-spacing: 2px;
-            text-transform: uppercase; /* 대문자로 자동 변환 */
         }
-        
-        .login-input:focus { border-color: #00ffcc; box-shadow: 0 0 10px rgba(0,255,204,0.2); }
 
-        .login-btn {
-            margin-top: 15px;
-            background: rgba(0, 255, 204, 0.1);
-            color: #00ffcc;
-            border: 1px solid #00ffcc;
+        button.login-btn {
+            background: #00ffcc;
+            color: #000;
+            border: none;
             padding: 10px 30px;
+            font-size: 1rem;
             cursor: pointer;
-            transition: 0.3s;
-        }
-        .login-btn:hover { background: #00ffcc; color: #000; }
-
-        .error-msg {
-            color: #ff3366;
-            font-size: 0.8rem;
-            margin-top: 15px;
-            display: none; /* 평소엔 숨김 */
-            animation: shake 0.3s;
+            font-weight: bold;
         }
 
-        @keyframes shake {
-            0% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            50% { transform: translateX(5px); }
-            75% { transform: translateX(-5px); }
-            100% { transform: translateX(0); }
-        }
-
-        /* ----- 기존 메인 콘텐츠 스타일 (로그인 후 보임) ----- */
-        .container {
-            width: 90%; max-width: 800px;
+        /* 📄 메인 화면 (처음엔 숨김) */
+        #main-content {
+            display: none; /* 로그인 전에는 안 보임 */
+            width: 90%;
+            max-width: 800px;
             text-align: center;
-            border: 1px solid rgba(0, 255, 204, 0.15);
-            background: rgba(10, 10, 12, 0.8);
-            backdrop-filter: blur(15px);
-            padding: 50px 30px;
-            border-radius: 8px;
-            box-shadow: 0 0 50px rgba(0, 0, 0, 0.8);
-            display: none; /* 로그인 전에는 숨김 */
-            animation: fadeIn 2s ease;
         }
 
-        .page-section { display: none; animation: fadeIn 0.8s ease; }
-        .page-section.active { display: block; }
+        .page-section { display: none; }
+        .page-section.active { display: block; animation: fadeEffect 1s; }
+        
+        @keyframes fadeEffect { from {opacity: 0;} to {opacity: 1;} }
+
+        /* 네비게이션 버튼 */
+        .nav-btn {
+            background: transparent;
+            border: 1px solid #555;
+            color: #aaa;
+            padding: 10px 20px;
+            margin: 10px;
+            cursor: pointer;
+        }
+        .nav-btn:hover { border-color: #00ffcc; color: #fff; }
+    </style>
+</head>
+<body>
+
+    <div id="login-screen">
+        <div class="login-box">
+            <h2>SYSTEM ACCESS</h2>
+            <p>관측자 ID를 입력하세요</p>
+            <input type="text" id="passInput" placeholder="ID 입력" onkeypress="if(event.key==='Enter') tryLogin()">
+            <br>
+            <button class="login-btn" onclick="tryLogin()">접속 (CONNECT)</button>
+            <p id="msg" style="color: #ff3366; display: none; margin-top: 10px;">⛔ 접근 거부: ID 불일치</p>
+        </div>
+    </div>
+
+    <div id="main-content">
+        <div id="page-0" class="page-section active">
+            <h1 style="color:#00ffcc; letter-spacing: 5px;">TEUM ARCHIVE</h1>
+            <p>접근 권한 승인 완료.</p>
+            <p style="font-size: 0.8rem; color: #666;">LOGGING START...</p>
+            <br>
+            <button class="nav-btn" style="border-color:#00ffcc; color:#00ffcc;" onclick="goPage(1)">기록 열람 시작</button>
+        </div>
+
+        <div id="page-1" class="page-section">
+            <h2>01 // 핵심개념</h2>
+            <p><strong>공명체:</strong> 틈과 동기화된 매개체</p>
+            <p><strong>반입자 에너지:</strong> 미래의 핵심 동력원</p>
+            <br>
+            <button class="nav-btn" onclick="goPage(2)">다음 ></button>
+        </div>
+
+        <div id="page-2" class="page-section">
+            <h2>02 // 조직소개 (MIRAE)</h2>
+            <p>기획팀, 연구팀, 회수팀, 대응팀으로 구성</p>
+            <br>
+            <button class="nav-btn" onclick="goPage(1)">< 이전</button>
+            <button class="nav-btn" onclick="goPage(3)">다음 ></button>
+        </div>
+
+        <div id="page-3" class="page-section">
+            <h2>03 // 이야기 연표</h2>
+            <p>2019년 겨울, 이석의 기억과 연화의 희생</p>
+            <br>
+            <button class="nav-btn" onclick="goPage(2)">< 이전</button>
+            <button class="nav-btn" onclick="goPage(4)">다음 ></button>
+        </div>
+
+        <div id="page-4" class="page-section">
+            <h2 style="color:#ff3366">05 // 미래자료실</h2>
+            <p style="color:#ff3366">[기밀] 4K 관측 로그 데이터</p>
+            <br>
+            <button class="nav-btn" onclick="goPage(3)">< 이전</button>
+            <button class="nav-btn" onclick="goPage(0)">처음으로</button>
+        </div>
+    </div>
+
+    <script>
+        function tryLogin() {
+            var input = document.getElementById('passInput').value;
+            var msg = document.getElementById('msg');
+            
+            // 비밀번호 설정 (여기에 원하는 단어 추가 가능)
+            // 대소문자 구분 없이 처리하기 위해 입력값을 대문자로 변환
+            if (input.toUpperCase() === 'TEUM' || input === '2026') {
+                document.getElementById('login-screen').style.display = 'none'; // 로그인창 끄기
+                document.getElementById('main-content').style.display = 'block'; // 메인화면 켜기
+            } else {
+                msg.style.display = 'block'; // 에러 메시지 띄우기
+            }
+        }
+
+        function goPage(num) {
+            // 모든 페이지 숨기기
+            var pages = document.querySelectorAll('.page-section');
+            for (var i = 0; i < pages.length; i++) {
+                pages[i].classList.remove('active');
+            }
+            // 해당 페이지만 보이기
+            document.getElementById('page-' + num).classList.add('active');
+        }
+    </script>
+
+</body>
+</html>
