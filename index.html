@@ -1,52 +1,86 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>틈(TEUM) 아카이브</title>
-    <link rel="stylesheet" href="style.css">
-    <style>
-        /* 깜빡이는 효과 (여기 추가됨) */
-        @keyframes blink { 0% { opacity: 1; } 100% { opacity: 0.5; } }
-    </style>
-</head>
-<body>
-    <audio id="bgm" loop><source src="bgm.mp3" type="audio/mp3"></audio>
+/* script.js */
 
-    <div id="login-screen">
-        <div class="login-box">
-            <h2 style="color:#00ffcc; margin:0 0 20px 0;">TEUM Archive</h2>
-            
-            <div id="login-form">
-                <div style="font-size:0.7rem; opacity:0.6; margin-bottom: 5px;">접속 승인 대기 중</div>
-                <input type="text" id="passInput" class="login-input" placeholder="PASSWORD" onkeypress="if(event.key==='Enter') tryLogin()">
-                <br><button class="login-btn" onclick="tryLogin()">CONNECT</button>
-                <p id="msg" style="color: #ff3366; display: none; margin-top: 15px; font-size: 0.8rem;">⚠ ERROR</p>
-            </div>
+const database = {
+    'concept': `<h2>01. 핵심개념</h2><p><strong>공명체:</strong> 틈과 동기화된 매개체</p><p><strong>반입자 에너지:</strong> 미래의 핵심 동력원</p>`,
+    'org': `<h2>02. 조직 데이터</h2><p><strong>미래BIO:</strong> 기획, 연구, 회수, 대응팀으로 구성</p>`,
+    'timeline': `<h2>03. 타임라인</h2><p>2019년 겨울, 이석의 기억과 연화의 희생</p>`,
+    'story': `<h2>04. 시나리오</h2><p>잔불: 희나와 희석의 서사 (2막 2편)</p>`,
+    'mirae': `<h2 style="color:#ff3366">05. 미래자료실 (기밀)</h2><p style="color:#ff3366">[기밀] 4K 관측 로그 데이터 보관소</p>`
+};
 
-            <div id="success-msg" style="display: none; animation: blink 0.5s infinite alternate;">
-                <h3 style="color: #00ffcc; margin: 20px 0;">✔ ACCESS GRANTED</h3>
-                <p style="font-size: 0.9rem; color: #fff;">관리자 권한 승인 완료.</p>
-                <p style="font-size: 0.8rem; color: #aaa;">시스템에 접속합니다...</p>
-            </div>
+function playBeep(freq = 800, duration = 0.05) {
+    try { 
+        const ctx = new (window.AudioContext || window.webkitAudioContext)(); 
+        const osc = ctx.createOscillator(); 
+        const gain = ctx.createGain(); 
+        osc.connect(gain); gain.connect(ctx.destination); 
+        osc.type = 'square'; osc.frequency.value = freq; gain.gain.value = 0.05; 
+        osc.start(); setTimeout(() => osc.stop(), duration * 1000); 
+    } catch(e) {}
+}
 
-        </div>
-    </div>
-
-    <div id="dashboard">
-        <div class="dash-header"><div><strong>TEUM ARCHIVE</strong></div><div style="color:#00ffcc; font-size:0.8rem;">● ONLINE</div></div>
-        <div class="grid-container">
-            <div class="folder-card" onclick="openFile('concept')"><div class="folder-icon">📂</div><div><div style="font-weight:bold;">01. 핵심개념</div><div style="font-size:0.7rem; opacity:0.7;">Core Physics</div></div></div>
-            <div class="folder-card" onclick="openFile('org')"><div class="folder-icon">🏢</div><div><div style="font-weight:bold;">02. 조직 데이터</div><div style="font-size:0.7rem; opacity:0.7;">Organization</div></div></div>
-            <div class="folder-card" onclick="openFile('timeline')"><div class="folder-icon">📅</div><div><div style="font-weight:bold;">03. 타임라인</div><div style="font-size:0.7rem; opacity:0.7;">History Logs</div></div></div>
-            <div class="folder-card" onclick="openFile('story')"><div class="folder-icon">📝</div><div><div style="font-weight:bold;">04. 시나리오</div><div style="font-size:0.7rem; opacity:0.7;">Main Story</div></div></div>
-            <div class="folder-card special" onclick="openFile('mirae')"><div class="folder-icon">🚫</div><div><div style="font-weight:bold; color:#ff3366">05. 미래자료실</div><div style="font-size:0.7rem; opacity:0.7;">Confidential</div></div></div>
-        </div>
-        <br><br>
-        <div id="file-viewer"><div class="close-btn" onclick="closeFile()">CLOSE [X]</div><div id="viewer-content" style="line-height: 1.6; padding-top: 20px;"></div></div>
-    </div>
+function tryLogin() {
+    // 1. 버튼 누르는 소리
+    playBeep(600, 0.1);
+    const input = document.getElementById('passInput').value.toUpperCase();
     
-    <div id="sound-control" onclick="toggleSound()">🔈 BGM OFF</div>
-    <script src="script.js"></script>
-</body>
-</html>
+    // 비밀번호 확인 (TEUM 또는 2026)
+    if (input === 'TEUM' || input === '2026') {
+        
+        // 2. 음악 재생 (즉시)
+        var audio = document.getElementById("bgm");
+        audio.volume = 0.5;
+        audio.play().then(() => {
+            document.getElementById('sound-control').innerHTML = "🔊 BGM ON";
+            document.getElementById('sound-control').style.color = "#00ffcc";
+        }).catch(e => { console.log(e); });
+
+        // 3. [핵심] 입력창 숨기고 -> 환영 메시지 보여주기
+        // (이 부분이 없으면 예전처럼 바로 넘어갑니다!)
+        if(document.getElementById('login-form')) {
+            document.getElementById('login-form').style.display = 'none'; // 입력창 끄기
+            document.getElementById('success-msg').style.display = 'block'; // 메시지 켜기
+        }
+        
+        playBeep(1200, 0.3); // 성공 효과음 삑!
+
+        // 4. 2초 뒤에 대시보드로 이동 (지연 효과)
+        setTimeout(() => {
+            document.getElementById('login-screen').style.opacity = '0'; // 페이드 아웃
+            setTimeout(() => { 
+                document.getElementById('login-screen').style.display = 'none'; 
+                document.getElementById('dashboard').style.display = 'block'; 
+            }, 800);
+        }, 2000); // 2000 = 2초 기다림
+
+    } else {
+        // 실패했을 때
+        playBeep(150, 0.3); 
+        document.getElementById('msg').style.display = 'block';
+    }
+}
+
+function openFile(id) { 
+    playBeep(1000, 0.05); 
+    document.getElementById('viewer-content').innerHTML = database[id]; 
+    document.getElementById('file-viewer').style.display = 'block'; 
+}
+
+function closeFile() { 
+    playBeep(600, 0.05); 
+    document.getElementById('file-viewer').style.display = 'none'; 
+}
+
+function toggleSound() {
+    var audio = document.getElementById("bgm"); 
+    var btn = document.getElementById("sound-control");
+    if (audio.paused) { 
+        audio.play(); 
+        btn.innerHTML = "🔊 BGM ON"; 
+        btn.style.color = "#00ffcc"; 
+    } else { 
+        audio.pause(); 
+        btn.innerHTML = "🔈 BGM OFF"; 
+        btn.style.color = "#555"; 
+    }
+}
