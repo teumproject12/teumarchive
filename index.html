@@ -4,18 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>틈(TEUM) 아카이브</title>
-    <link rel="stylesheet" href="style.css"> </head>
+    <link rel="stylesheet" href="style.css">
+</head>
 <body>
     <audio id="bgm" loop><source src="bgm.mp3" type="audio/mp3"></audio>
 
     <div id="login-screen">
         <div class="login-box">
             <h2 style="color:#00ffcc; margin:0 0 20px 0;">TEUM Archive</h2>
-            <div style="font-size:0.7rem; opacity:0.6; margin-bottom: 5px;">접속 승인 대기 중</div>
             
-            <input type="text" id="passInput" class="login-input" placeholder="PASSWORD" onkeypress="if(event.key==='Enter') tryLogin()">
-            <br><button class="login-btn" onclick="tryLogin()">CONNECT</button>
-            <p id="msg" style="color: #ff3366; display: none; margin-top: 15px; font-size: 0.8rem;">⚠ ERROR</p>
+            <div id="login-form">
+                <div style="font-size:0.7rem; opacity:0.6; margin-bottom: 5px;">접속 승인 대기 중</div>
+                <input type="text" id="passInput" class="login-input" placeholder="PASSWORD" onkeypress="if(event.key==='Enter') tryLogin()">
+                <br><button class="login-btn" onclick="tryLogin()">CONNECT</button>
+                <p id="msg" style="color: #ff3366; display: none; margin-top: 15px; font-size: 0.8rem;">⚠ ERROR</p>
+            </div>
+
+            <div id="success-msg" style="display: none; animation: blink 0.5s infinite alternate;">
+                <h3 style="color: #00ffcc; margin: 20px 0;">✔ ACCESS GRANTED</h3>
+                <p style="font-size: 0.9rem; color: #fff;">관리자 권한 승인 완료.</p>
+                <p style="font-size: 0.8rem; color: #aaa;">시스템에 접속합니다...</p>
+            </div>
+
         </div>
     </div>
 
@@ -33,5 +43,6 @@
     </div>
     
     <div id="sound-control" onclick="toggleSound()">🔈 BGM OFF</div>
-    <script src="script.js"></script> </body>
+    <script src="script.js"></script>
+</body>
 </html>
